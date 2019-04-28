@@ -11,6 +11,7 @@ tuling = Tuling(api_key='a05e064837ec40df929370b69c8397ac')
 @bot.register(msg_types=TEXT)
 def auto_reply_all(msg):
     tuling.do_reply(msg)
- 
+	print(msg.text, msg.sender)
+    print(tuling.reply_text(msg))
 # 开始运行
 bot.join()
