@@ -23,7 +23,7 @@ git commit -m "commit"
 git remote add origin git@github.com:Username/Repositories.git   //SSH
 git remote add origin https://github.com/Username/Repositories.git //Https 
 git push origin master 
-
+git push -u origin master //加上-u参数可以将本地分支和远程分支关联起来，以后推送或拉取就可以简化命令
 出现fatal: refusing to merge unrelated histories
 强制合并 git pull origin master --allow-unrelated-histories
 --allow-unrelated-histories , 把两段不相干的 分支进行强行合并
