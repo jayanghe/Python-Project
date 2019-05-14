@@ -3,8 +3,9 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 import  xml.dom.minidom
+from pykeyboard import PyKeyboard
 dom = xml.dom.minidom.parse('database.xml')
 root = dom.documentElement
 itemlist = root.getElementsByTagName('login')
@@ -28,48 +29,57 @@ for SWB in li:
 	print(SWB)
 	for x in range(2,99999):
 		if(len(browser.window_handles)>=2):
+			browser.implicitly_wait(20)
 			browser.switch_to_window(browser.window_handles[1])
-			browser.implicitly_wait(200) 
+			browser.implicitly_wait(20)
 			break
-	browser.implicitly_wait(200)
-	WebDriverWait(browser,10,0.1).until(lambda browser:browser.find_element_by_id('selector_elm'))
+	dir="C:\\AgileDownload\\"+str(SWB)
+	os.system("md %s" %(dir))
+	browser.implicitly_wait(20)
+	browser.switch_to_window(browser.window_handles[1])
+	WebDriverWait(browser,1000,0.2).until(lambda browser:browser.find_element_by_id('selector_elm'))
 	ele=browser.find_element_by_id('selector_elm')
 	browser.execute_script('arguments[0].click()',ele)
 	ele=browser.find_element_by_xpath('//*[@id="cls_901"]/a')
 	browser.execute_script('arguments[0].click()',ele)
-	WebDriverWait(browser,20,0.5).until(lambda browser:browser.find_element_by_name('QUICKSEARCH_STRING'))
+	WebDriverWait(browser,1000,0.2).until(lambda browser:browser.find_element_by_name('QUICKSEARCH_STRING'))
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(Keys.CONTROL + 'a')
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(str(SWB))
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(Keys.ENTER)
-	WebDriverWait(browser,30,0.5).until(lambda browser:browser.find_element_by_id('Actionsspan'))
-	ele=browser.find_element_by_id('Actionsspan')
+	# WebDriverWait(browser,300,0.5).until(lambda browser:browser.find_element_by_id('Actionsspan'))
+	browser.implicitly_wait(200)
+	WebDriverWait(browser,1000,0.2).until(lambda browser:browser.find_element_by_xpath('//*[@id="Actionsspan"]'))
+	# ele=browser.find_element_by_id('Actionsspan')
+	ele=browser.find_element_by_xpath('//*[@id="Actionsspan"]')
 	browser.execute_script('arguments[0].click()',ele)
-	browser.implicitly_wait(30)  
+	WebDriverWait(browser,1000,0.2).until(lambda browser:browser.find_element_by_xpath("//a[text()='AIC_AgileAttachmentUtility']"))	
 	ele=browser.find_element_by_xpath("//a[text()='AIC_AgileAttachmentUtility']")
 	browser.execute_script('arguments[0].click()',ele)
-	browser.implicitly_wait(30)  
+	browser.implicitly_wait(20)
 	for x in range(2,99999):
 		if(len(browser.window_handles)>=3):
 			browser.switch_to_window(browser.window_handles[-1])
-			browser.implicitly_wait(200) 
+			browser.implicitly_wait(20)
 			break
-	browser.implicitly_wait(200) 
+	time.sleep(2)		
+	WebDriverWait(browser,200,0.5).until(lambda browser:browser.find_element_by_link_text('File Download'))		
 	ele=browser.find_element_by_link_text('File Download')
 	browser.execute_script('arguments[0].click()',ele)
-	browser.implicitly_wait(200) 
-	WebDriverWait(browser,60,0.5).until(lambda browser:browser.find_elements_by_css_selector('input[type=checkbox]'))
+	time.sleep(10)
+	WebDriverWait(browser,600,0.5).until(lambda browser:browser.find_elements_by_css_selector('input[type=checkbox]'))
 	checkboxes = browser.find_elements_by_css_selector('input[type=checkbox]')
 	for checkbox in checkboxes:
 		browser.execute_script('arguments[0].click()',checkbox)
 	download= browser.find_elements_by_css_selector('input[type=button]')
 	browser.execute_script('arguments[0].click()',download[0])
-	browser.implicitly_wait(30) 
 	for x in range(2,100):
 		if(len(browser.window_handles)>=3):
 			time.sleep(3)
 			browser.switch_to_window(browser.window_handles[-1])
 			break
-	# WebDriverWait(browser,120).until(EC.alert_is_present())
-	# alert = browser.switch_to.alert
-	# print(alert.text)
-	# alert.accept()
+	time.sleep(60)
+	k = PyKeyboard()
+	# k.tap_key(k.right_key)
+	k.type_string(dir)
+	k.tap_key(k.enter_key)
+	time.sleep(10)

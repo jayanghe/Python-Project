@@ -3,7 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from pykeyboard import PyKeyboard
 import  xml.dom.minidom
 dom = xml.dom.minidom.parse('database.xml')
 root = dom.documentElement
@@ -12,7 +12,7 @@ item = itemlist[0]
 User=item.getAttribute("username")
 Pwd=item.getAttribute("passwd")
 
-li=list((input("input SWB:").split(" ")))
+li=list((input("input Report Name:").split(" ")))
 cwd=os.getcwd()
 path=cwd+"\\IEDriverServer.exe"
 iedriver=(path)	
@@ -29,9 +29,9 @@ for SWB in li:
 	for x in range(2,99999):
 		if(len(browser.window_handles)>=2):
 			browser.switch_to_window(browser.window_handles[1])
-			browser.implicitly_wait(200) 
+			browser.implicitly_wait(10)
 			break
-	browser.implicitly_wait(200)
+	time.sleep(1)
 	WebDriverWait(browser,10,0.1).until(lambda browser:browser.find_element_by_id('selector_elm'))
 	ele=browser.find_element_by_id('selector_elm')
 	browser.execute_script('arguments[0].click()',ele)
@@ -41,8 +41,7 @@ for SWB in li:
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(Keys.CONTROL + 'a')
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(str(SWB))
 	browser.find_element_by_name('QUICKSEARCH_STRING').send_keys(Keys.ENTER)
-	time.sleep(2)
-	browser.implicitly_wait(200)
+	time.sleep(1)
 	ele=browser.find_element_by_xpath("//a[text()='"+str(SWB)+"']")
 	browser.execute_script('arguments[0].click()',ele)
 	browser.implicitly_wait(10)
@@ -51,19 +50,34 @@ for SWB in li:
 	for x in range(2,99999):
 		if(len(browser.window_handles)>=3):
 			browser.switch_to_window(browser.window_handles[-1])
-			browser.implicitly_wait(200) 
+			browser.implicitly_wait(10)
 			break
-	browser.implicitly_wait(200) 
+	time.sleep(2)
+	WebDriverWait(browser,30,0.1).until(lambda browser:browser.find_element_by_id('cmdFinishspan'))
 	ele=browser.find_element_by_id('cmdFinishspan')
 	browser.execute_script('arguments[0].click()',ele)
+	time.sleep(70)
+	print(browser.window_handles)
 	for x in range(2,99999):
-		if(len(browser.window_handles)>=4):
+		if(len(browser.window_handles)>=3):
 			browser.switch_to_window(browser.window_handles[-1])
-			browser.implicitly_wait(200) 
+			browser.implicitly_wait(10)
 			break
-	browser.implicitly_wait(200) 
+	browser.implicitly_wait(10)
+	browser.switch_to.frame(0)	
+	# WebDriverWait(browser,20,0.1).until(lambda browser:browser.find_element_by_xpath('//*[@id="exportRpt"]/span'))
 	ele=browser.find_element_by_xpath('//*[@id="exportRpt"]/span')
 	browser.execute_script('arguments[0].click()',ele)
+	time.sleep(1)
+	browser.switch_to_window(browser.window_handles[-1])
+	browser.switch_to.frame(1)	
+	time.sleep(1)
+	ele=browser.find_element_by_id('prompt_ok')
 	browser.execute_script('arguments[0].click()',ele)
-	ele=browser.find_element_by_id('prompt_okspan')
-	browser.execute_script('arguments[0].click()',ele)
+	time.sleep(8)
+	k = PyKeyboard()
+	# k.press_key(k.tab_key)
+
+	k.tap_key(k.tab_key,2)
+	k.tap_key(k.enter_key)
+	
